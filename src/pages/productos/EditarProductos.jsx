@@ -3,16 +3,26 @@ import { useForm } from "react-hook-form";
 import Swal from 'sweetalert2'
 import { Navigate } from 'react-router-dom';
 import useProductos from "../../hooks/useProductos";
+
+
 const EditarProductos = ({ id, setModalEditar }) => {
+
     const { register, handleSubmit } = useForm();
+
     const { obtenerProducto, productoState, eliminado, updateProductos, setProductoState, editado } = useProductos();
+
     useEffect(() => {
         obtenerProducto(id);
     }, []);
+
     const { _id, nombre, description, precio, stock, image } = productoState;
+
     //console.log(_id, nombre, description, typeof(precio), stock);
+
     const onSubmit = async (datos) => {
+
         //console.log(datos.precio);
+
         Swal.fire({
             title: 'Quieres guardar los cambios?',
             showDenyButton: true,
@@ -22,6 +32,7 @@ const EditarProductos = ({ id, setModalEditar }) => {
         }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
+
                 const formData = new FormData();
                 formData.append("id", id);
                 formData.append("image", datos.file[0]);
@@ -29,8 +40,10 @@ const EditarProductos = ({ id, setModalEditar }) => {
                 formData.append("description", datos.description);
                 formData.append("precio", datos.precio);
                 formData.append("stock", datos.stock);
+
                 updateProductos(_id, formData);
                 Swal.fire('Guardado!', '', 'success')
+
                 Swal.fire({
                     position: 'top-end',
                     icon: 'success',
@@ -38,11 +51,14 @@ const EditarProductos = ({ id, setModalEditar }) => {
                     showConfirmButton: false,
                     timer: 1500
                 })
+
             } else if (result.isDenied) {
                 Swal.fire('Los cambios no se guardaron', '', 'info')
             }
         })
     };
+
+
     return (
         <div className="flex justify-center bg-slate-500 absolute w-full h-screen top-0 bg-opacity-60 mt-24">
             {eliminado && <Navigate to="/productos" />}
@@ -59,9 +75,12 @@ const EditarProductos = ({ id, setModalEditar }) => {
                         >
                             X
                         </button>
-                        <h1 className="font-bold text-6xl uppercase text-center w-full mx-auto mt-24">
+
+                        <h1 className="font-bold text-6xl uppercase text-center w-full mx-auto">
                             Edita tu <span className="text-sky-700">producto</span>
                         </h1>
+
+
                         <div className="mb-9 flex justify-center">
                             <img
                                 src={image ? `${image.url}` : ""}
@@ -69,6 +88,7 @@ const EditarProductos = ({ id, setModalEditar }) => {
                                 className="h-56 w-96 border-2"
                             />
                         </div>
+
                         <div className="mb-5">
                             <label htmlFor="nombre" className="font-medium">
                                 Nombre
@@ -166,4 +186,5 @@ const EditarProductos = ({ id, setModalEditar }) => {
         </div>
     );
 };
+
 export default EditarProductos;

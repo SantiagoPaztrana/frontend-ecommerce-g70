@@ -1,14 +1,19 @@
 import { createContext, useState, useEffect } from 'react';
 import clienteAxios from '../config/axios';
+
 const UsuariosContext = createContext();
+
 const UsuariosProvider = ({ children }) => {
+
     const [usuarios, setUsuarios] = useState([]);
     const [usuario, setUsuario] = useState({});
+
     useEffect(() => {
         const obtenerUsuarios = async () => {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) return;
+
                 const config = {
                     headers: {
                         "Content-Type": "application/json",
@@ -24,6 +29,7 @@ const UsuariosProvider = ({ children }) => {
         }
         obtenerUsuarios();
     }, []);
+
     const guardarUsuario = async (usuario) => {
         console.log(usuario)
         const token = localStorage.getItem('token');
@@ -33,6 +39,7 @@ const UsuariosProvider = ({ children }) => {
                 Authorization: `Bearer ${token}`
             }
         }
+
         if (usuario.id) {
             try {
                 const { data } = await clienteAxios.put(`/usuarios/${usuario.id}`, usuario, config);
@@ -53,12 +60,16 @@ const UsuariosProvider = ({ children }) => {
             }
         }
     };
+
     const setEdicion = (usuario) => {
         setUsuario(usuario);
     };
+
     const eliminarUsuario = async (id) => {
         const confirmar = confirm('¿Confirmas que deseas eliminar?');
+
         if (confirmar) {
+
             try {
                 const token = localStorage.getItem('token');
                 const config = {
@@ -67,14 +78,19 @@ const UsuariosProvider = ({ children }) => {
                         Authorization: `Bearer ${token}`
                     }
                 }
+
                 const { data } = await clienteAxios.delete(`/usuarios/${id}`, config);
+
                 const usuariosActualizados = usuarios.filter(usuarioState => usuarioState._id !== id);
                 setUsuarios(usuariosActualizados);
+
             } catch (error) {
                 console.log(error);
             }
         };
     };
+
+
     return (
         <UsuariosContext.Provider
             value={{
@@ -89,7 +105,9 @@ const UsuariosProvider = ({ children }) => {
         </UsuariosContext.Provider>
     );
 }
+
 export {
     UsuariosProvider
 }
+
 export default UsuariosContext;

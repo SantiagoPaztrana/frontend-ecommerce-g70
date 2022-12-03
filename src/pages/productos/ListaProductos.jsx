@@ -1,9 +1,13 @@
 import { useEffect } from "react";
+
 import useProductos from "../../hooks/useProductos";
 import Producto from "./Producto";
+
 import Navbar from "../../components/Navbar";
+
 const ListaProductos = () => {
     const { productos } = useProductos();
+
     return (
         <>
             <Navbar texto="Agregar Producto" ruta="agregar-producto" />
@@ -12,11 +16,14 @@ const ListaProductos = () => {
                     <h1 className="font-bold text-5xl uppercase text-center w-full mx-auto mb-10">
                         <span className="text-sky-700">productos</span> a comprar
                     </h1>
+
                     <div className="flex mx-4 gap-5 mb-10 flex-wrap justify-center">
                         {productos.length ? (
                             <>
                                 {productos.map((producto) => (
-                                    <Producto key={producto.id} producto={producto} />
+                                    <Producto
+                                        key={producto.id}
+                                        producto={producto} />
                                 ))}
                             </>
                         ) : (
@@ -30,4 +37,5 @@ const ListaProductos = () => {
         </>
     );
 };
+
 export default ListaProductos;

@@ -1,21 +1,30 @@
 import { Navigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import Swal from 'sweetalert2';
+
 import useProductos from "../../hooks/useProductos";
+
 import Navbar from "../../components/Navbar";
 import Alerta from '../../components/Alerta';
+
 const FormularioProductos = () => {
+
     const { register, handleSubmit } = useForm();
     const { submitProducto, guardado } = useProductos();
+
     const onSubmit = (datos) => {
         //e.preventDefault();
+
         const formData = new FormData();
+
         formData.append("image", datos.file[0]);
         formData.append("nombre", datos.nombre);
         formData.append("description", datos.description);
         formData.append("precio", datos.precio);
         formData.append("stock", datos.stock);
+
         submitProducto(formData);
+
         Swal.fire({
             position: 'top-end',
             icon: 'success',
@@ -23,7 +32,9 @@ const FormularioProductos = () => {
             showConfirmButton: false,
             timer: 1500
         })
+
     };
+
     return (
         <>
             <Navbar texto="Productos" ruta="" />
@@ -33,6 +44,7 @@ const FormularioProductos = () => {
                     <h1 className="font-bold text-6xl uppercase text-center w-full mx-auto">
                         Registra tus <span className="text-sky-700">productos</span>
                     </h1>
+
                     <form
                         className="px-5 mx-auto py-5 sm:px-9 sm:w-5/6 md:w-4/5 lg:w-3/4 shadow-lg bg-white rounded-xl"
                         onSubmit={handleSubmit(onSubmit)}
@@ -111,4 +123,5 @@ const FormularioProductos = () => {
         </>
     );
 };
+
 export default FormularioProductos;
